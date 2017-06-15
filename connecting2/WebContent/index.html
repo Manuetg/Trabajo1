@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en">
+<head>
+    <title>Connecting</title>
+    <meta charset="UTF-8" />
+    
+    <!-- add one of the jQWidgets styles -->
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.darkblue.css" type="text/css" />
+    
+    <!-- add the jQuery script -->
+    <script type="text/javascript" src="scripts/jquery-3.2.0.js"></script>
+    <!-- add the jQWidgets framework -->
+    <script type="text/javascript" src="jqwidgets/jqx-all.js"></script>
+    <!--  script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdockpanel.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxlistmenu.js"></script -->
+</head>
+<body>
+  <script type="text/javascript">
+  
+	//Configuraciones generales para invocaciones AJAX con JQuery
+	$.ajaxSetup({
+	    contentType : 'application/json',
+	    processData : false
+	});
+	$.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
+	    if (options.data){
+	        options.data=JSON.stringify(options.data);
+	    }
+	});
+	
+  
+  	function irListaUsuarios() {
+  		$("#placeHolder").attr('src',"lista_usuarios.html");
+  	}
+  	
+  	function cerrarSesion() {
+  		localStorage.setItem('token',null);
+  		location.reload();
+  	}
+  
+  	$(document).ready(function () {	
+  		$("#panelPrincipal").jqxDockPanel({ width: "100%", height: 600});
+  		$("#menuPrincipal").hide();
+  		$("#formularioLogin").hide();
+  		
+  		//Verificar si el usuario ya esta logueado
+  		var token = localStorage.getItem('token');
+  		
+  		if (token) {
+  			$.ajax({
+ 			    type: "GET",
+ 			    url: "rest/sesion/" + token,
+ 			    statusCode:{
+ 			    	200: function() { 			    
+		 			    	//Mostrar el menu solo a usuarios logueados
+		 			    	$('#menuPrincipal').jqxMenu({ width: "100%", height: 30 });	
+		 			    	$("#menuPrincipal").show();
+		 				},
+		 			403: function() {
+	 						mostrarLogin();
+	 					}
+ 			    	}
+	 			});
+  		}
+  		else {
+  			mostrarLogin();
+  		}
+  	});
+  	
+  	function mostrarLogin() {
+  		$("#formularioLogin").jqxWindow({ width: 400, height: 150, autoOpen:false });
+  		$("#formularioLogin").show();
+  	}
+  	
+  	function login() {
+  		var sesion = {};
+  		
+  		sesion.usuario = $('#usuario').val();
+  		sesion.password = $('#password').val();
+		
+		$.ajax({
+		    type: "POST",
+		    url: "rest/sesion",
+		    contentType: "application/json",
+		    data: sesion,
+		    statusCode:{
+			    	200: function(respuesta) { 			    
+			    		console.log('Token recibido ' + respuesta.token);
+				    	localStorage.setItem('token',respuesta.token);
+						location.reload(true);
+	 				},
+	 			403: function() {
+ 						alert("Usuario o contrasenha incorrecto");
+ 					}
+			}
+		});
+  	}
+ </script>
+
+  <div id='panelPrincipal' style="width:100%">
+
+    <div id='cabecera' dock='top' style="height:130px">
+
+		<img src="imagenes/header.jpg" height="100px" width="100%"/>
+
+		  <!-- Menu principal -->
+		  <div id="menuPrincipal" data-role="listmenu">
+			<ul>
+		  		<li>Usuarios
+		  			<ul>
+		              <li><a href="javascript:irListaUsuarios();">Administraci&oacute;n de Usuarios</a></li>
+		              <li>Cambiar mi contrasenha</li>
+		              <li><a href="javascript:cerrarSesion();">Cerrar Sesi&oacute;n</a></li>
+		             </ul>
+		         </li>
+		         <li>Grupos
+		         <ul>
+		              <li>Administraci&oacute;n de Grupos</li>
+		         </ul>
+		         </li>
+		      </ul>
+		   </div>
+		   <!-- Fin Menu principal -->
+       
+    </div>
+
+	<!-- Parte central de la pagina -->
+     <div id='cuerpo'>
+    	<iframe id="placeHolder" src="" frameborder="0" width="1200" height="1200" scrolling="no" ></iframe>
+    </div>
+
+   </div>
+</div>
+
+
+	<!-- Formulario de login -->
+	<div id="formularioLogin">
+		<div>Formulario de Login</div>
+		<div>
+			<form>
+				<table align="center">
+					<tr>
+						<td>Codigo de Usuario:</td><td><input id="usuario" type="text"/></td>
+					</tr>					
+					<tr>
+						<td>Contrasenha:</td><td> <input id="password" type="password" /></td>
+					</tr>
+					<tr>
+						<td><input type="button" value="Ingresar" onclick="login();" /></td>
+					</tr>
+				</table>
+			</form>			
+		</div>
+	</div>
+</body>
+</html>

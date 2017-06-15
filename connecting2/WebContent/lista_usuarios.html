@@ -1,0 +1,264 @@
+<html>
+<head>
+	<meta charset="UTF-8" />
+	    <!-- add one of the jQWidgets styles -->
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.darkblue.css" type="text/css" />
+    
+    <!-- add the jQuery script -->
+    <script type="text/javascript" src="scripts/jquery-3.2.0.js"></script>
+    <!-- add the jQWidgets framework -->
+    <script type="text/javascript" src="jqwidgets/jqx-all.js"></script>
+    <!--  script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdockpanel.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxlistmenu.js"></script -->
+</head>
+<body>
+	
+	<table width="60%" align="center">
+	<tr>
+		<td>
+			<b>Listado de Usuarios</b><br><br>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div id="jqxToolBar"></div>
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+			<div id="jqxgrid" align="center"></div>
+		</td>
+	</tr>
+	</table>
+	<script>
+		$(document).ready(function () {	
+			/*
+			 * Inicializar el toolbar
+			 */
+			 $("#jqxToolBar").jqxToolBar({ width: "100%", height: 35, tools: "button | button | button",
+	                minWidth:20,
+				 	initTools: function (type, index, tool, menuToolIninitialization) {
+	                    switch (index) {
+		                    case 0:
+	                            tool.text("Nuevo");
+	                            tool.on("click",formularioCrear);
+	                            break;    
+		                    case 1:
+	                            tool.text("Ver / Modificar");
+	                            tool.on("click",formularioModificar);
+	                            break;
+	                        case 2:
+	                        	tool.text("Eliminar");
+	                        	tool.on("click",eliminar);
+	                            break;
+	                    }
+	                }
+	            });
+			
+			
+			/*
+			 * Inicializar la grilla
+			 */
+			 
+			var source =
+			{
+			    datatype: "json",
+			    datafields: [
+			        { name: 'codUsuario' },
+			        { name: 'nombre' },
+			        { name: 'telefono'},
+			        { name: 'email'},
+			        { name: 'password'}
+			    ],
+			    url:'rest/usuarios'
+			};
+			var dataAdapter = new $.jqx.dataAdapter(source, {
+			    loadComplete: function (data) { },
+			    loadError: function (xhr, status, error) { }    
+			});
+			$("#jqxgrid").jqxGrid(
+			{
+			 	autoheight: true,
+			 	autowidth: true,
+			 	theme: 'energyblue',
+				source: dataAdapter,
+				pageable: true,
+			    columns: [
+			        { text: 'Codigo de usuario', datafield: 'codUsuario', width: 180 },
+			        { text: 'Nombre y Apellido', datafield: 'nombre', width: 180 },
+			        { text: 'Telefono', datafield: 'telefono', width: 100 },
+			        { text: 'Email', datafield: 'email', width: 180},
+			        { text: 'Contrasenha', datafield: 'password', width: 100}
+			    ]
+			});
+		});
+		
+		$(document).ready(function () {
+	        $("#formularioUsuario").jqxWindow({ width: 600, height: 300, autoOpen:false });
+	    });
+		
+		//Configuraciones generales para invocaciones AJAX con JQuery
+		$.ajaxSetup({
+		    contentType : 'application/json',
+		    processData : false
+		});
+		$.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
+		    if (options.data){
+		        options.data=JSON.stringify(options.data);
+		    }
+		});
+	 	
+		
+		//Indica si el formulario se abre para editar usuario existente
+		//o para crear uno nuevo
+	 	var modo;
+	 		 	
+	 	
+	 	/**
+	 	 * Mostrar el formulario de edicion de usuarios
+	 	 */
+	 	function formularioModificar() {
+	 		modo = 'edicion'; //se va a modificar usuario existente
+	 		
+	 		//cargar los datos de la fila seleccionada al formulario
+	 		var selectedrowindex = $('#jqxgrid').jqxGrid('selectedrowindex'); 
+	 		var usuario = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
+	 		
+	 		console.log('Id de fila:' + selectedrowindex);
+	 		console.log(usuario);
+	 		
+	 		$('#codUsuario').val(usuario.codUsuario);
+	 		$('#nombre').val(usuario.nombre);
+	 		$('#telefono').val(usuario.telefono);
+	 		$('#email').val(usuario.email);
+	 		$('#password').val(usuario.password);
+	 		
+	 		$("#password").prop("readonly", true);
+	 		$("#codUsuario").prop("readonly", true);
+	 		
+	 		//mostrar el formulario
+	 		$('#formularioUsuario').jqxWindow('open');
+	 	}
+	 	
+	 	/**
+	 	 * Mostrar el formulario en modo creacion
+	 	 */
+	 	function formularioCrear() {
+	 		modo = 'creacion'; //se va a crear nuevo usuario
+	 			 		
+	 		
+	 		$('#codUsuario').val('');
+	 		$('#nombre').val('');
+	 		$('#telefono').val('');
+	 		$('#email').val('');
+	 		$('#password').val('');
+	 		
+	 		$("#password").prop("readonly", false);
+	 		$("#codUsuario").prop("readonly", false);
+	 		
+	 		//mostrar el formulario
+	 		$('#formularioUsuario').jqxWindow('open');
+	 	}
+	 	
+	 	
+	 	/**
+	 	 * Enviar los cambios al servidor
+	 	 */
+	 	function guardar() {
+	 		
+	 		console.log('Guardando en modo ' + modo);
+	 		
+	 		var usuario = {};
+	 		
+	 		usuario.codUsuario = $('#codUsuario').val();
+	 		usuario.nombre = $('#nombre').val();
+	 		usuario.telefono = $('#telefono').val();
+	 		usuario.email = $('#email').val();
+	 			 		
+	 		if (modo == 'edicion') {
+	 			$.ajax({
+	 			    type: "PUT",
+	 			    url: "rest/usuarios",
+	 			    contentType: "application/json",
+	 			    data: usuario,
+	 			    success:function() {
+	 					alert('Usuario guardado exitosamente');	
+	 					$('#formularioUsuario').jqxWindow('close');
+	 					location.reload(true);
+	 				  }	
+	 			});
+	 		} else {  //creacion
+	 			usuario.password = $('#password').val();
+	 		
+	 			console.log("haciendo post de usuario ...")
+	 			console.log(usuario);
+	 			
+	 			$.ajax({
+	 			    type: "POST",
+	 			    url: "rest/usuarios",
+	 			    contentType: "application/json",
+	 			    data: usuario,
+	 			    success:function() {
+	 					alert('Usuario guardado exitosamente');	
+	 					$('#formularioUsuario').jqxWindow('close');
+	 					location.reload(true);
+	 				  }	
+	 			});
+	 		}
+	 	}
+	 	
+	 	function eliminar() {
+	 		//cargar los datos de la fila seleccionada al formulario
+	 		var selectedrowindex = $('#jqxgrid').jqxGrid('selectedrowindex'); 
+	 		var usuario = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
+	 		
+	 		console.log('Id de fila:' + selectedrowindex);
+	 		console.log('usuario a borrar: ' + usuario.codUsuario);
+		 		
+	 		$.ajax({
+ 			    type: "DELETE",
+ 			    url: "rest/usuarios/" + usuario.codUsuario,
+ 			    success:function() {
+ 					alert('Usuario borrado exitosamente');	 					
+ 					location.reload(true);
+ 				  }	
+ 			});
+	 	}
+	 	
+	</script>
+	
+	
+	<!-- Formulario para creacion y edicion de usuarios -->
+	<div id="formularioUsuario">
+		<div>Formulario de Usuario</div>
+		<div>
+			<form>
+				<table align="center">
+					<tr>
+						<td>Codigo de Usuario:</td><td><input id="codUsuario" type="text"/></td>
+					</tr>
+					<tr>
+						<td>Nombre:</td><td> <input id="nombre" type="text"/></td>
+					</tr>
+					<tr>
+						<td>Telefono:</td><td><input id="telefono" type="text"/></td>
+					</tr>
+					<tr>
+						<td>Email:</td><td> <input id="email" type="text"/></td>
+					</tr>
+					<tr>
+						<td>Contrasenha:</td><td> <input id="password" type="password" readonly/></td>
+					</tr>
+					<tr>
+						<td><input type="button" value="Guardar" onclick="guardar();" /></td>
+						<td><input type="button" value="Cancelar" onclick="$('#formularioUsuario').jqxWindow('close');"  /></td>
+					</tr>
+				</table>
+			</form>			
+		</div>
+	</div>
+</body>
+</html>
