@@ -33,6 +33,7 @@ import py.edu.upa.connecting.entidades.Usuario;
 @RequestScoped
 public class GruposCopy {
 
+	
 	/**
 	 * Datasource para obtener conexion a base de datos
 	 * @param member
