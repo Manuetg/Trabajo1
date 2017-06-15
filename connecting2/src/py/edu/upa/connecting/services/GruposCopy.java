@@ -57,6 +57,7 @@ public class GruposCopy {
 		
 		if (codUsuario != null)
 			sql += "and codUsuario = " + codUsuario;
+		
 
 		
 		try (Connection con = ds.getConnection();
