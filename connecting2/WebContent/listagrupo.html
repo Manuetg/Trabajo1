@@ -1,0 +1,276 @@
+<html>
+<head>
+	<meta charset="UTF-8" />
+	    <!-- add one of the jQWidgets styles -->
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.darkblue.css" type="text/css" />
+    
+    <!-- add the jQuery script -->
+    <script type="text/javascript" src="scripts/jquery-3.2.0.js"></script>
+    <!-- add the jQWidgets framework -->
+    <script type="text/javascript" src="jqwidgets/jqx-all.js"></script>
+    <!--  script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxdockpanel.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxlistmenu.js"></script -->
+</head>
+<body>
+	
+	<table width="60%" align="center">
+	<tr>
+		<td>
+			<b>Listado de Grupos</b><br><br>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div id="jqxToolBar"></div>
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+			<div id="jqxgrid" align="center"></div>
+		</td>
+	</tr>
+	</table>
+	<script>
+		$(document).ready(function () {	
+			/*
+			 * Inicializar el toolbar
+			 */
+			 $("#jqxToolBar").jqxToolBar({ width: "100%", height: 35, tools: "button | button | button",
+	                minWidth:20,
+				 	initTools: function (type, index, tool, menuToolIninitialization) {
+	                    switch (index) {
+		                    case 0:
+	                            tool.text("Nuevo");
+	                            tool.on("click",formularioCrear);
+	                            break;    
+		                    case 1:
+	                            tool.text("Ver / Modificar");
+	                            tool.on("click",formularioModificar);
+	                            break;
+	                        case 2:
+	                        	tool.text("Eliminar");
+	                        	tool.on("click",eliminar);
+	                            break;
+	                    }
+	                }
+	            });
+			
+			
+			/*
+			 * Inicializar la grilla
+			 */
+			 
+			var source =
+			{
+			    datatype: "json",
+			    datafields: [
+			        { name: 'codGrupo' },
+			        { name: 'nombre' },
+			        { name: 'objetivo'},
+			        { name: 'latitud'},
+			        { name: 'longitud'}
+			        { name: 'cod_usuario_creacion'}
+			        { name: 'fecha_creacion'}
+			    ],
+			    url:'rest/GruposCopy'
+			};
+/*			var dataAdapter = new $.jqx.dataAdapter(source, {
+			    loadComplete: function (data) { },
+			    loadError: function (xhr, status, error) { }    
+			});
+*/			$("#jqxgrid").jqxGrid(
+			{
+			 	autoheight: true,
+			 	autowidth: true,
+			 	theme: 'energyblue',
+				source: dataAdapter,
+				pageable: true,
+			    columns: [
+			        { text: 'Codigo de grupo', datafield: 'codGrupo', width: 180 },
+			        { text: 'Nombre de grupo', datafield: 'nombre', width: 180 },
+			        { text: 'objetivo', datafield: 'objetivo', width: 100 },
+			        { text: 'latitud', datafield: 'latitud', width: 180},
+			        { text: 'longitud', datafield: 'longitud', width: 100}
+			        { text: 'codigo usuario creador', datafield: 'cod_usuario_creacion', width: 100}
+			        { text: 'fecha de creacion', datafield: 'fecha_creacion', width: 100}
+			        
+			    ]
+			});
+		});
+		
+		$(document).ready(function () {
+	        $("#formularioGrupo").jqxWindow({ width: 600, height: 300, autoOpen:false });
+	    });
+		
+		//Configuraciones generales para invocaciones AJAX con JQuery
+		$.ajaxSetup({
+		    contentType : 'application/json',
+		    processData : false
+		});
+		$.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
+		    if (options.data){
+		        options.data=JSON.stringify(options.data);
+		    }
+		});
+	 	
+		
+		//Indica si el formulario se abre para editar usuario existente
+		//o para crear uno nuevo
+	 	var modo;
+	 		 	
+	 	
+	 	/**
+	 	 * Mostrar el formulario de edicion de usuarios
+	 	 */
+	 	function formularioModificar() {
+	 		modo = 'edicion'; //se va a modificar usuario existente
+	 		
+	 		//cargar los datos de la fila seleccionada al formulario
+	 		var selectedrowindex = $('#jqxgrid').jqxGrid('selectedrowindex'); 
+	 		var usuario = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
+	 		
+	 		console.log('Id de fila:' + selectedrowindex);
+	 		console.log(usuario);
+	 	
+	        
+	 		$('#codGrupo').val(GruposCopy.codGrupo);
+	 		$('#nombre').val(GruposCopy.nombre);
+	 		$('#objetivo').val(GruposCopy.objetivo);
+	 		$('#latitud').val(GruposCopy.latitud);
+	 		$('#longitud').val(GruposCopy.longitud);
+	 		$("#cod_usuario_creacion").val(GruposCopy.cod_usuario_creacion);
+	 		$("#fecha_creacion").val(GruposCopy.fecha_creacion);
+	 		
+	 		//mostrar el formulario
+	 		$('#formularioGrupo').jqxWindow('open');
+	 	}
+	 	
+	 	/**
+	 	 * Mostrar el formulario en modo creacion
+	 	 */
+	 	function formularioCrear() {
+	 		modo = 'creacion'; //se va a crear nuevo usuario
+	 			 		
+	 		
+	 		$('#codGrupo').val('');
+	 		$('#nombre').val('');
+	 		$('#objetivo').val('');
+	 		$('#latitud').val('');
+	 		$('#longitud').val('');
+	 		$('#cod_usuario_creacion').val('');
+	 		$('#fecha_creacion').val('');
+	 		
+	 		//mostrar el formulario
+	 		$('#formularioGrupo').jqxWindow('open');
+	 	}
+	 	
+	 	
+	 	/**
+	 	 * Enviar los cambios al servidor
+	 	 */
+	 	function guardar() {
+	 		
+	 		console.log('Guardando en modo ' + modo);
+	 		
+	 		var gruposcopy = {};
+	 		
+	 		gruposcopy.codGrupo = $('#codGrupo').val();
+	 		gruposcopy.nombre = $('#nombre').val();
+	 		gruposcopy.objetivo = $('#objetivo').val();
+	 		gruposcopy.latitud = $('#latitud').val();
+	 		gruposcopy.longitud= $('#longitud').val('');
+	 		gruposcopy.cod_usuario_creacion= $('#cod_usuario_creacion').val('');
+	 		gruposcopy.fecha_creacion= $('#fecha_creacion').val('');
+			 		
+	 		if (modo == 'edicion') {
+	 			$.ajax({
+	 			    type: "PUT",
+	 			    url: "rest/usuarios",
+	 			    contentType: "application/json",
+	 			    data: usuario,
+	 			    success:function() {
+	 					alert('Usuario guardado exitosamente');	
+	 					$('#formularioGrupo').jqxWindow('close');
+	 					location.reload(true);
+	 				  }	
+	 			});
+	 		} else {  //creacion
+	 		
+	 			console.log("haciendo post de usuario ...")
+	 			console.log(usuario);
+	 			
+	 			$.ajax({
+	 			    type: "POST",
+	 			    url: "rest/usuarios",
+	 			    contentType: "application/json",
+	 			    data: usuario,
+	 			    success:function() {
+	 					alert('Usuario guardado exitosamente');	
+	 					$('#formularioGrupo').jqxWindow('close');
+	 					location.reload(true);
+	 				  }	
+	 			});
+	 		}
+	 	}
+	 	
+	 	function eliminar() {
+	 		//cargar los datos de la fila seleccionada al formulario
+	 		var selectedrowindex = $('#jqxgrid').jqxGrid('selectedrowindex'); 
+	 		var usuario = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
+	 		
+	 		console.log('Id de fila:' + selectedrowindex);
+	 		console.log('usuario a borrar: ' + usuario.codGrupo);
+		 		
+	 		$.ajax({
+ 			    type: "DELETE",
+ 			    url: "rest/GruposCopy/" + GruposCopy.codGrupo,
+ 			    success:function() {
+ 					alert('Grupo borrado exitosamente');	 					
+ 					location.reload(true);
+ 				  }	
+ 			});
+	 	}
+	 	
+	</script>
+	
+	
+	<!-- Formulario para creacion y edicion de Grupos -->
+	<div id="formularioGrupo">
+		<div>Formulario de Grupos</div>
+		<div>
+			<form>
+				<table align="center">
+					<tr>
+						<td>Codigo de grupo:</td><td><input id="codGrupo" type="text"/></td>
+					</tr>
+					<tr>
+						<td>Nombre:</td><td> <input id="nombre" type="text"/></td>
+					</tr>
+					<tr>
+						<td>objetivo:</td><td><input id="objetivo" type="text"/></td>
+					</tr>
+					<tr>
+						<td>latitud:</td><td> <input id="latitud" type="text"/></td>
+					</tr>
+					<tr>
+						<td>longitud:</td><td> <input id="longitud" type="text" readonly/></td>
+					</tr>
+					<tr>
+						<td>cod_usuario_creacion:</td><td> <input id="cod_usuario_creacion" type="text" readonly/></td>
+					</tr>
+					<tr>
+						<td>fecha_creacion:</td><td> <input id="fecha_creacion" type="text" readonly/></td>
+					</tr>
+					<tr>
+						<td><input type="button" value="Guardar" onclick="guardar();" /></td>
+						<td><input type="button" value="Cancelar" onclick="$('#formularioGrupo').jqxWindow('close');"  /></td>
+					</tr>
+				</table>
+			</form>			
+		</div>
+	</div>
+</body>
+</html>
