@@ -80,7 +80,7 @@ public class GruposCopy {
 	}
 
 	@GET
-	@Path("/{id}")
+	@Path("/{id}")//probandoCOmentario
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response obtenerGrupo(@PathParam("id") String codGrupo) {
 		
