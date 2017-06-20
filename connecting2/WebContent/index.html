@@ -36,6 +36,9 @@
   	function irListaUsuarios() {
   		$("#placeHolder").attr('src',"lista_usuarios.html");
   	}
+  	function irListaGrupo() {
+  		$("#placeHolder").attr('src',"listagrupo.html");
+  	}
   	
   	function cerrarSesion() {
   		localStorage.setItem('token',null);
@@ -119,7 +122,10 @@
 		         </li>
 		         <li>Grupos
 		         <ul>
-		              <li>Administraci&oacute;n de Grupos</li>
+		         
+		            
+		              <li><a href="javascript:irListaGrupo();">Administraci&oacute;n de Grupos</a></li>
+		              
 		         </ul>
 		         </li>
 		      </ul>
