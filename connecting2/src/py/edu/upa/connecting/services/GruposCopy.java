@@ -249,6 +249,34 @@ public class GruposCopy {
 			// Handle generic exceptions.
 			e.printStackTrace();
 			return null;
-		}
+		}}
+		@DELETE
+		@Path("/{id}/integrantes/{id2}")
+		@Produces(MediaType.APPLICATION_JSON)
+		public Response abandonarGrupo(@PathParam("id") String codUsuario,@PathParam("id2") Long codGrupo) {
+
+			Response.ResponseBuilder builder = null;
+
+			try (Connection con = ds.getConnection();
+				 PreparedStatement ps = con.prepareStatement("delete from integrantes_grupo  "
+				 										   + "where integrantes_grupo.cod_usuario = '?' and integrantes_grupo.cod_grupo = '?'")
+				 ) {
+							
+				ps.setString(1, codUsuario);
+				ps.setLong(2, codGrupo);
+				
+				ps.executeUpdate();
+				
+				builder = Response.ok();
+			
+			} catch (Exception e) {
+				// Handle generic exceptions.
+				e.printStackTrace();
+				Map<String, String> responseObj = new HashMap<String, String>();
+				responseObj.put("error","Ocurrio el siguiente error: " +  e.getMessage());
+				builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
+			}
+
+			return builder.build();
 	}
 }
