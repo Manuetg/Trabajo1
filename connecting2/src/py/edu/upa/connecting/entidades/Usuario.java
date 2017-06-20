@@ -6,7 +6,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Usuario implements Serializable {
-	
+	// nada
+
 	private static final long serialVersionUID = 1L;
 	
 	String codUsuario;
