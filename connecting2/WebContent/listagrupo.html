@@ -71,8 +71,8 @@
 			        { name: 'nombre' },
 			        { name: 'objetivo'},
 			        { name: 'latitud'},
-			        { name: 'longitud'}
-			        { name: 'cod_usuario_creacion'}
+			        { name: 'longitud'},
+			        { name: 'cod_usuario_creacion'},
 			        { name: 'fecha_creacion'}
 			    ],
 			    url:'rest/GruposCopy',
@@ -95,8 +95,8 @@
 			        { text: 'Nombre de grupo', datafield: 'nombre', width: 180 },
 			        { text: 'objetivo', datafield: 'objetivo', width: 100 },
 			        { text: 'latitud', datafield: 'latitud', width: 180},
-			        { text: 'longitud', datafield: 'longitud', width: 100}
-			        { text: 'codigo usuario creador', datafield: 'cod_usuario_creacion', width: 100}
+			        { text: 'longitud', datafield: 'longitud', width: 100},
+			        { text: 'codigo usuario creador', datafield: 'cod_usuario_creacion', width: 100},
 			        { text: 'fecha de creacion', datafield: 'fecha_creacion', width: 100}
 			        
 			    ]
@@ -188,6 +188,7 @@
 	 		gruposcopy.cod_usuario_creacion= $('#cod_usuario_creacion').val();
 	 		gruposcopy.fecha_creacion= $('#fecha_creacion').val();
 			 		
+	 		
 	 		if (modo == 'edicion') {
 	 			$.ajax({
 	 			    type: "PUT",
@@ -242,7 +243,7 @@
 	
 	<!-- Formulario para creacion y edicion de Grupos -->
 	<div id="formularioGrupo">
-		<div>Formulario de Grupos</div>
+		<div>Formulario de Grupos en proceso...</div>
 		<div>
 			<form>
 				<table align="center">
