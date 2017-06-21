@@ -67,7 +67,7 @@
 			{
 			    datatype: "json",
 			    datafields: [
-			        { name: 'codGrupo' },
+			        { name: 'codgrupo' },
 			        { name: 'nombre' },
 			        { name: 'objetivo'},
 			        { name: 'latitud'},
@@ -75,13 +75,13 @@
 			        { name: 'cod_usuario_creacion'}
 			        { name: 'fecha_creacion'}
 			    ],
-			    url:'rest/GruposCopy'
+			    url:'rest/GruposCopy' + GruposCopy.codGrupo,
 			};
-/*			var dataAdapter = new $.jqx.dataAdapter(source, {
+		var dataAdapter = new $.jqx.dataAdapter(source, {
 			    loadComplete: function (data) { },
 			    loadError: function (xhr, status, error) { }    
 			});
-*/			$("#jqxgrid").jqxGrid(
+		$("#jqxgrid").jqxGrid(
 			{
 			 	autoheight: true,
 			 	autowidth: true,
@@ -89,7 +89,7 @@
 				source: dataAdapter,
 				pageable: true,
 			    columns: [
-			        { text: 'Codigo de grupo', datafield: 'codGrupo', width: 180 },
+			        { text: 'Codigo de grupo', datafield: 'codgrupo', width: 180 },
 			        { text: 'Nombre de grupo', datafield: 'nombre', width: 180 },
 			        { text: 'objetivo', datafield: 'objetivo', width: 100 },
 			        { text: 'latitud', datafield: 'latitud', width: 180},
@@ -121,6 +121,7 @@
 		//o para crear uno nuevo
 	 	var modo;
 	 		 	
+		
 	 	
 	 	/**
 	 	 * Mostrar el formulario de edicion de usuarios
@@ -130,13 +131,13 @@
 	 		
 	 		//cargar los datos de la fila seleccionada al formulario
 	 		var selectedrowindex = $('#jqxgrid').jqxGrid('selectedrowindex'); 
-	 		var usuario = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
+	 		var gruposcopy = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
 	 		
 	 		console.log('Id de fila:' + selectedrowindex);
-	 		console.log(usuario);
+	 		console.log(gruposcopy);
 	 	
 	        
-	 		$('#codGrupo').val(GruposCopy.codGrupo);
+	 		$('#codgrupo').val(GruposCopy.codGrupo);
 	 		$('#nombre').val(GruposCopy.nombre);
 	 		$('#objetivo').val(GruposCopy.objetivo);
 	 		$('#latitud').val(GruposCopy.latitud);
@@ -155,7 +156,7 @@
 	 		modo = 'creacion'; //se va a crear nuevo usuario
 	 			 		
 	 		
-	 		$('#codGrupo').val('');
+	 		$('#codgrupo').val('');
 	 		$('#nombre').val('');
 	 		$('#objetivo').val('');
 	 		$('#latitud').val('');
@@ -177,7 +178,7 @@
 	 		
 	 		var gruposcopy = {};
 	 		
-	 		gruposcopy.codGrupo = $('#codGrupo').val();
+	 		gruposcopy.codGrupo = $('#codgrupo').val();
 	 		gruposcopy.nombre = $('#nombre').val();
 	 		gruposcopy.objetivo = $('#objetivo').val();
 	 		gruposcopy.latitud = $('#latitud').val();
@@ -188,9 +189,9 @@
 	 		if (modo == 'edicion') {
 	 			$.ajax({
 	 			    type: "PUT",
-	 			    url: "rest/usuarios",
+	 			    url: "rest/GruposCopy" + GruposCopy.codGrupo,//cambie
 	 			    contentType: "application/json",
-	 			    data: usuario,
+	 			    data: gruposcopy,
 	 			    success:function() {
 	 					alert('Usuario guardado exitosamente');	
 	 					$('#formularioGrupo').jqxWindow('close');
@@ -200,13 +201,13 @@
 	 		} else {  //creacion
 	 		
 	 			console.log("haciendo post de usuario ...")
-	 			console.log(usuario);
+	 			console.log(gruposcopy);
 	 			
 	 			$.ajax({
 	 			    type: "POST",
-	 			    url: "rest/usuarios",
+	 			    url: "rest/GruposCopy" + GruposCopy.codGrupo,
 	 			    contentType: "application/json",
-	 			    data: usuario,
+	 			    data: gruposcopy,
 	 			    success:function() {
 	 					alert('Usuario guardado exitosamente');	
 	 					$('#formularioGrupo').jqxWindow('close');
@@ -219,10 +220,10 @@
 	 	function eliminar() {
 	 		//cargar los datos de la fila seleccionada al formulario
 	 		var selectedrowindex = $('#jqxgrid').jqxGrid('selectedrowindex'); 
-	 		var usuario = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
+	 		var gruposcopy = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
 	 		
 	 		console.log('Id de fila:' + selectedrowindex);
-	 		console.log('usuario a borrar: ' + usuario.codGrupo);
+	 		console.log('usuario a borrar: ' + gruposcopy.codGrupo);
 		 		
 	 		$.ajax({
  			    type: "DELETE",
@@ -256,13 +257,13 @@
 						<td>latitud:</td><td> <input id="latitud" type="text"/></td>
 					</tr>
 					<tr>
-						<td>longitud:</td><td> <input id="longitud" type="text" readonly/></td>
+						<td>longitud:</td><td> <input id="longitud" type="text"/></td>
 					</tr>
 					<tr>
-						<td>cod_usuario_creacion:</td><td> <input id="cod_usuario_creacion" type="text" readonly/></td>
+						<td>cod_usuario_creacion:</td><td> <input id="cod_usuario_creacion" type="text"/></td>
 					</tr>
 					<tr>
-						<td>fecha_creacion:</td><td> <input id="fecha_creacion" type="text" readonly/></td>
+						<td>fecha_creacion:</td><td> <input id="fecha_creacion" type="text" /></td>
 					</tr>
 					<tr>
 						<td><input type="button" value="Guardar" onclick="guardar();" /></td>
