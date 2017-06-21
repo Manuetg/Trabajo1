@@ -166,6 +166,7 @@ public class GruposCopy {
 	}
 	
 	@PUT
+
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response modificarGrupo (Grupo grupo) {

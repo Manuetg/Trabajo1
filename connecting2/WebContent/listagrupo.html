@@ -133,19 +133,19 @@
 	 		
 	 		//cargar los datos de la fila seleccionada al formulario
 	 		var selectedrowindex = $('#jqxgrid').jqxGrid('selectedrowindex'); 
-	 		var gruposcopy = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
+	 		var Grupo = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
 	 		
 	 		console.log('Id de fila:' + selectedrowindex);
-	 		console.log(gruposcopy);
+	 		console.log(Grupo);
 	 	
 	        
-	 		$('#codgrupo').val(GruposCopy.codGrupo);
-	 		$('#nombre').val(GruposCopy.nombre);
-	 		$('#objetivo').val(GruposCopy.objetivo);
-	 		$('#latitud').val(GruposCopy.latitud);
-	 		$('#longitud').val(GruposCopy.longitud);
-	 		$("#cod_usuario_creacion").val(GruposCopy.cod_usuario_creacion);
-	 		$("#fecha_creacion").val(GruposCopy.fecha_creacion);
+	 		$('#codgrupo').val(Grupo.codGrupo);
+	 		$('#nombre').val(Grupo.nombre);
+	 		$('#objetivo').val(Grupo.objetivo);
+	 		$('#latitud').val(Grupo.latitud);
+	 		$('#longitud').val(Grupo.longitud);
+	 		$("#cod_usuario_creacion").val(Grupo.codusuariocreacion);
+	 		$("#fecha_creacion").val(Grupo.fechacreacion);
 	 		
 	 		//mostrar el formulario
 	 		$('#formularioGrupo').jqxWindow('open');
@@ -178,24 +178,24 @@
 	 		
 	 		console.log('Guardando en modo ' + modo);
 	 		
-	 		var gruposcopy = {};
+	 		var Grupo = {};
 	 		
-	 		gruposcopy.codGrupo = $('#codgrupo').val();
-	 		gruposcopy.nombre = $('#nombre').val();
-	 		gruposcopy.objetivo = $('#objetivo').val();
-	 		gruposcopy.latitud = $('#latitud').val();
-	 		gruposcopy.longitud= $('#longitud').val();
-	 		gruposcopy.cod_usuario_creacion= $('#cod_usuario_creacion').val();
-	 		gruposcopy.fecha_creacion= $('#fecha_creacion').val();
+	 		Grupo.codGrupo = $('#codgrupo').val();
+	 		Grupo.nombre = $('#nombre').val();
+	 		Grupo.objetivo = $('#objetivo').val();
+	 		Grupo.latitud = $('#latitud').val();
+	 		Grupo.longitud= $('#longitud').val();
+	 		Grupo.cod_usuario_creacion= $('#cod_usuario_creacion').val();
+	 		Grupo.fecha_creacion= $('#fecha_creacion').val();
 	 		
 	 		if (modo == 'edicion') {
 	 			$.ajax({
 	 			    type: "PUT",
-	 			    url: "rest/GruposCopy" + GruposCopy.codGrupo,//cambie
+	 			    url: "rest/GruposCopy",
 	 			    contentType: "application/json",
 	 			    data: gruposcopy,
 	 			    success:function() {
-	 					alert('Usuario guardado exitosamente');	
+	 					alert('Grupo guardado exitosamente');	
 	 					$('#formularioGrupo').jqxWindow('close');
 	 					location.reload(true);
 	 				  }	
@@ -203,15 +203,15 @@
 	 		} else {  //creacion
 	 		
 	 			console.log("haciendo post de usuario ...")
-	 			console.log(gruposcopy);
+	 			console.log(Grupo);
 	 			
 	 			$.ajax({
 	 			    type: "POST",
-	 			    url: "rest/GruposCopy" + GruposCopy.codGrupo,
+	 			    url: "rest/GruposCopy",
 	 			    contentType: "application/json",
 	 			    data: gruposcopy,
 	 			    success:function() {
-	 					alert('Usuario guardado exitosamente');	
+	 					alert('Grupo guardado exitosamente');	
 	 					$('#formularioGrupo').jqxWindow('close');
 	 					location.reload(true);
 	 				  }	
@@ -225,11 +225,11 @@
 	 		var gruposcopy = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
 	 		
 	 		console.log('Id de fila:' + selectedrowindex);
-	 		console.log('usuario a borrar: ' + gruposcopy.codGrupo);
+	 		console.log('grupo a borrar: ' + Grupo.codGrupo);
 		 		
 	 		$.ajax({
  			    type: "DELETE",
- 			    url: "rest/GruposCopy/" + GruposCopy.codGrupo,
+ 			    url: "rest/GruposCopy/" + Grupo.codGrupo,
  			    success:function() {
  					alert('Grupo borrado exitosamente');	 					
  					location.reload(true);
