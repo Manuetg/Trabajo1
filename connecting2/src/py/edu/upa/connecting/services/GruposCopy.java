@@ -150,14 +150,14 @@ public class GruposCopy {
 		
 		while(rs.next()) {
 			Grupo grupoActual = new Grupo();
-			
+		
 			grupoActual.setCodGrupo(rs.getLong("cod_grupo"));
 			grupoActual.setNombre(rs.getString("nombre"));
 			grupoActual.setObjetivo(rs.getString("objetivo"));
-			grupoActual.setLatitud(rs.getInt("latitud"));
 			grupoActual.setLongitud(rs.getInt("longitud"));
+			grupoActual.setLatitud(rs.getInt("latitud"));
 			grupoActual.setCodUsuarioCreacion(rs.getString("cod_usuario_creacion"));
-			grupoActual.setFechaUsuarioCreacion(rs.getDate("fecha_creacion")); 
+			grupoActual.setFechaCreacion(rs.getDate("fecha_creacion")); 
 			
 			listaGrupos.add(grupoActual);
 		}
