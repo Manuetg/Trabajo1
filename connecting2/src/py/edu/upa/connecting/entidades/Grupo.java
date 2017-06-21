@@ -37,12 +37,14 @@ public class Grupo implements Serializable{
 		this.objetivo = objetivo;
 	}
 	public Integer getLatitud() {
+		if(latitud==null){return 0;}
 		return latitud;
 	}
 	public void setLatitud(Integer latitud) {
 		this.latitud = latitud;
 	}
 	public Integer getLongitud() {
+		if(longitud==null){return 0;}
 		return longitud;
 	}
 	public void setLongitud(Integer longitud) {
@@ -54,11 +56,11 @@ public class Grupo implements Serializable{
 	public void setCodUsuarioCreacion(String codUsuarioCreacion) {
 		this.codUsuarioCreacion = codUsuarioCreacion;
 	}
-	public Date getFechaUsuarioCreacion() {
+	public Date getFechaCreacion() {
 		return fechaCreacion;
 	}
-	public void setFechaUsuarioCreacion(Date fechaUsuarioCreacion) {
-		this.fechaCreacion = fechaUsuarioCreacion;
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
 	}
 	
 	

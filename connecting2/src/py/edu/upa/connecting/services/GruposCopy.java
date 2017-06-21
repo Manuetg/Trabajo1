@@ -166,7 +166,6 @@ public class GruposCopy {
 	}
 	
 	@PUT
-
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response modificarGrupo (Grupo grupo) {
@@ -174,17 +173,17 @@ public class GruposCopy {
 		Response.ResponseBuilder builder = null;
 
 		try (Connection con = ds.getConnection();
-			 PreparedStatement ps = con.prepareStatement("update GRUPO set nombre = ?,objetivo = ?,latitud=?,longitud=? "
+			 PreparedStatement ps = con.prepareStatement("update GRUPO set cod_grupo = ?,nombre = ?,objetivo = ?,latitud=?,longitud=? ,cod_usuario_creacion = ?, fecha_creacion = ?"
 			 										   + "where cod_grupo = ?")
 			 ) {
-						
 			
-			ps.setString(1, grupo.getNombre());
-			ps.setString(2, grupo.getObjetivo());
-			ps.setInt(3, grupo.getLatitud());
-			ps.setInt(4, grupo.getLongitud());
-			ps.setLong(5, grupo.getCodGrupo());
-			
+			ps.setLong(1, grupo.getCodGrupo());
+			ps.setString(2, grupo.getNombre());
+			ps.setString(3, grupo.getObjetivo());
+			ps.setInt(4, grupo.getLatitud());
+			ps.setInt(5, grupo.getLongitud());
+			ps.setString(6, grupo.getCodUsuarioCreacion());
+			ps.setDate(7, new Date(System.currentTimeMillis()));
 			ps.executeUpdate();
 			
 			builder = Response.ok();
