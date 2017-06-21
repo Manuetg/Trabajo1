@@ -144,8 +144,8 @@
 	 		$('#objetivo').val(Grupo.objetivo);
 	 		$('#latitud').val(Grupo.latitud);
 	 		$('#longitud').val(Grupo.longitud);
-	 		$("#cod_usuario_creacion").val(Grupo.codusuariocreacion);
-	 		$("#fecha_creacion").val(Grupo.fechacreacion);
+	 		$("#cod_usuario_creacion").val(Grupo.codUsuarioCreacion);
+	 		$("#fecha_creacion").val(Grupo.fechaCreacion);
 	 		
 	 		//mostrar el formulario
 	 		$('#formularioGrupo').jqxWindow('open');
@@ -180,20 +180,20 @@
 	 		
 	 		var Grupo = {};
 	 		
-	 		Grupo.codGrupo = $('#codgrupo').val();
+	 		Grupo.codGrupo = $('#codGrupo').val();
 	 		Grupo.nombre = $('#nombre').val();
 	 		Grupo.objetivo = $('#objetivo').val();
 	 		Grupo.latitud = $('#latitud').val();
 	 		Grupo.longitud= $('#longitud').val();
-	 		Grupo.cod_usuario_creacion= $('#cod_usuario_creacion').val();
-	 		Grupo.fecha_creacion= $('#fecha_creacion').val();
-	 		
+	 		Grupo.codUsuarioCreacion= $('#codUsuarioCreacion').val();
+	 		Grupo.fechaCreacion= $('#fechaCreacion').val();
+// poner en el coso tamvine + grupos,codgrugop	 		
 	 		if (modo == 'edicion') {
 	 			$.ajax({
 	 			    type: "PUT",
 	 			    url: "rest/grupos",
 	 			    contentType: "application/json",
-	 			    data: gruposcopy,
+	 			    data: Grupo,
 	 			    success:function() {
 	 					alert('Grupo guardado exitosamente');	
 	 					$('#formularioGrupo').jqxWindow('close');
@@ -202,7 +202,7 @@
 	 			});
 	 		} else {  //creacion
 	 		
-	 			console.log("haciendo post de usuario ...")
+	 			console.log("haciendo post de Grupo ...")
 	 			console.log(Grupo);
 	 			
 	 			$.ajax({
@@ -262,10 +262,10 @@
 						<td>longitud:</td><td> <input id="longitud" type="text"/></td>
 					</tr>
 					<tr>
-						<td>cod_usuario_creacion:</td><td> <input id="cod_usuario_creacion" type="text"/></td>
+						<td>codUsuarioCreacion:</td><td> <input id="codUsuarioCreacion" type="text"/></td>
 					</tr>
 					<tr>
-						<td>fecha_creacion:</td><td> <input id="fecha_creacion" type="text" /></td>
+						<td>fechaCreacion:</td><td> <input id="fechaCreacion" type="text" /></td>
 					</tr>
 					<tr>
 						<td><input type="button" value="Guardar" onclick="guardar();" /></td>
