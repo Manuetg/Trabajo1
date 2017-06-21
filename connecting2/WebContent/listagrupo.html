@@ -67,15 +67,15 @@
 			{
 			    datatype: "json",
 			    datafields: [
-			        { name: 'codgrupo' },
+			        { name: 'codGrupo' },
 			        { name: 'nombre' },
 			        { name: 'objetivo'},
 			        { name: 'latitud'},
 			        { name: 'longitud'},
-			        { name: 'cod_usuario_creacion'},
-			        { name: 'fecha_creacion'}
+			        { name: 'codUsuarioCreacion'},
+			        { name: 'fechaCreacion'}
 			    ],
-			    url:'rest/GruposCopy',
+			    url:'rest/grupos',
 			};
 		var dataAdapter = new $.jqx.dataAdapter(source, {
 			    loadComplete: function (data) { },
@@ -91,13 +91,13 @@
 			    columns: [
 			    	
 			    	
-			        { text: 'Codigo de grupo', datafield: 'codgrupo', width: 180 },
+			        { text: 'Codigo de grupo', datafield: 'codGrupo', width: 180 },
 			        { text: 'Nombre de grupo', datafield: 'nombre', width: 180 },
 			        { text: 'objetivo', datafield: 'objetivo', width: 100 },
 			        { text: 'latitud', datafield: 'latitud', width: 180},
 			        { text: 'longitud', datafield: 'longitud', width: 100},
-			        { text: 'codigo usuario creador', datafield: 'cod_usuario_creacion', width: 100},
-			        { text: 'fecha de creacion', datafield: 'fecha_creacion', width: 100}
+			        { text: 'codigo usuario creador', datafield: 'codUsuarioCreacion', width: 100},
+			        { text: 'fecha de creacion', datafield: 'fechaCreacion', width: 100}
 			        
 			    ]
 			});
@@ -191,7 +191,7 @@
 	 		if (modo == 'edicion') {
 	 			$.ajax({
 	 			    type: "PUT",
-	 			    url: "rest/GruposCopy",
+	 			    url: "rest/grupos",
 	 			    contentType: "application/json",
 	 			    data: gruposcopy,
 	 			    success:function() {
@@ -207,9 +207,9 @@
 	 			
 	 			$.ajax({
 	 			    type: "POST",
-	 			    url: "rest/GruposCopy",
+	 			    url: "rest/grupos",
 	 			    contentType: "application/json",
-	 			    data: gruposcopy,
+	 			    data: Grupo,
 	 			    success:function() {
 	 					alert('Grupo guardado exitosamente');	
 	 					$('#formularioGrupo').jqxWindow('close');
@@ -225,11 +225,11 @@
 	 		var gruposcopy = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
 	 		
 	 		console.log('Id de fila:' + selectedrowindex);
-	 		console.log('grupo a borrar: ' + Grupo.codGrupo);
+	 		console.log('grupo a borrar: ' + gruposcopy.codGrupo);
 		 		
 	 		$.ajax({
  			    type: "DELETE",
- 			    url: "rest/GruposCopy/" + Grupo.codGrupo,
+ 			    url: "rest/grupos/" + gruposcopy.codGrupo,
  			    success:function() {
  					alert('Grupo borrado exitosamente');	 					
  					location.reload(true);
