@@ -137,13 +137,15 @@
 	 		console.log(Grupo);
 	 	
 	        
-	 		$('#codgrupo').val(Grupo.codGrupo);
+	 		$('#codGrupo').val(Grupo.codGrupo);
 	 		$('#nombre').val(Grupo.nombre);
 	 		$('#objetivo').val(Grupo.objetivo);
 	 		$('#latitud').val(Grupo.latitud);
 	 		$('#longitud').val(Grupo.longitud);
 	 		$("#cod_usuario_creacion").val(Grupo.codUsuarioCreacion);
 	 		$("#fecha_creacion").val(Grupo.fechaCreacion);
+	 		
+	 		$("#codgrupo").prop("readonly", true);		
 	 		console.log(Grupo);
 
 	 		//mostrar el formulario
@@ -155,9 +157,10 @@
 	 	 */
 	 	function formularioCrear() {
 	 		modo = 'creacion'; //se va a crear nuevo usuario
-	 			 		
+	 		var selectedrowindex = $('#jqxgrid').jqxGrid('selectedrowindex'); 
+	 		var Grupo = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
 	 		
-	 		$('#codgrupo').val('');
+	 		$('#codGrupo').val('');
 	 		$('#nombre').val('');
 	 		$('#objetivo').val('');
 	 		$('#latitud').val('');
@@ -165,6 +168,7 @@
 	 		$('#cod_usuario_creacion').val('');
 	 		$('#fecha_creacion').val('');
 	 		
+	 		$("#codgrupo").prop("readonly", false);		
 	 		//mostrar el formulario
 	 		$('#formularioGrupo').jqxWindow('open');
 	 	}
@@ -246,7 +250,7 @@
 			<form>
 				<table align="center">
 					<tr>
-						<td>Codigo de grupo:</td><td><input id="codGrupo" type="text"/></td>
+						<td>Codigo de grupo:</td><td><input id="codGrupo" type="text" readonly/></td>
 					</tr>
 					<tr>
 						<td>Nombre:</td><td> <input id="nombre" type="text"/></td>
