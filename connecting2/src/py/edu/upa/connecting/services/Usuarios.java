@@ -103,6 +103,35 @@ public class Usuarios {
 		return builder.build();
 	}
 
+	@PUT
+	@Path("/{id}/{id2}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response modificarContrasena(@PathParam("id") String codUsuario,@PathParam("id2") String contrasena) {
+		Response.ResponseBuilder builder = null;
+
+		try (Connection con = ds.getConnection();
+			 PreparedStatement ps = con.prepareStatement("update USUARIO set password=? "
+			 										   + "where cod_usuario = ?")
+			 ) {
+						
+			ps.setString(1, contrasena);
+			ps.setString(2, codUsuario);
+			
+			ps.executeUpdate();
+			
+			builder = Response.ok();
+		
+		} catch (Exception e) {
+			// Handle generic exceptions.
+			e.printStackTrace();
+			Map<String, String> responseObj = new HashMap<String, String>();
+			responseObj.put("error","Ocurrio el siguiente error: " +  e.getMessage());
+			builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
+		}
+
+		return builder.build();
+	}
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)

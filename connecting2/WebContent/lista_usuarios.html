@@ -163,6 +163,48 @@
 	 		$('#formularioUsuario').jqxWindow('open');
 	 	}
 	 	
+	 	function formularioModificarContrasena() {
+	 		modo = 'edicion'; //se va a modificar usuario existente
+	 		
+	 		//cargar los datos de la fila seleccionada al formulario
+	 		var selectedrowindex = $('#jqxgrid').jqxGrid('selectedrowindex'); 
+	 		var usuario = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
+	 		
+	 		console.log('Id de fila:' + selectedrowindex);
+	 		console.log(usuario);
+	 		
+	 		$('#codUsuario').val(usuario.codUsuario);
+	 		$('#nombre').val(usuario.nombre);
+	 		$('#telefono').val(usuario.telefono);
+	 		$('#email').val(usuario.email);
+	 		$('#password').val(usuario.password);
+	 		
+	 		$("#password").prop("readonly", true);
+	 		$("#codUsuario").prop("readonly", true);
+	 		
+	 		//mostrar el formulario
+	 		$('#formularioUsuario').jqxWindow('open');
+	 	}
+	 	
+	 	/**
+	 	 * Mostrar el formulario en modo creacion
+	 	 */
+	 	function formularioCrear() {
+	 		modo = 'creacion'; //se va a crear nuevo usuario
+	 			 		
+	 		
+	 		$('#codUsuario').val('');
+	 		$('#nombre').val('');
+	 		$('#telefono').val('');
+	 		$('#email').val('');
+	 		$('#password').val('');
+	 		
+	 		$("#password").prop("readonly", false);
+	 		$("#codUsuario").prop("readonly", false);
+	 		
+	 		//mostrar el formulario
+	 		$('#formularioUsuario').jqxWindow('open');
+	 	}
 	 	
 	 	/**
 	 	 * Enviar los cambios al servidor
