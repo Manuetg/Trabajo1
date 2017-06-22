@@ -161,7 +161,6 @@ public class GruposCopy {
 			
 			listaGrupos.add(grupoActual);
 		}
-		
 		return listaGrupos;
 	}
 	
