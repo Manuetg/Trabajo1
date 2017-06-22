@@ -38,7 +38,7 @@
 			/*
 			 * Inicializar el toolbar
 			 */
-			 $("#jqxToolBar").jqxToolBar({ width: "100%", height: 35, tools: "button | button | button",
+			 $("#jqxToolBar").jqxToolBar({ width: "100%", height: 35, tools: "button | button | button | button",
 	                minWidth:20,
 				 	initTools: function (type, index, tool, menuToolIninitialization) {
 	                    switch (index) {
@@ -54,6 +54,11 @@
 	                        	tool.text("Eliminar");
 	                        	tool.on("click",eliminar);
 	                            break;
+	                        case 3:
+	                        	tool.text("cambiar contrasena");
+	                        	tool.on("click",formularioModificarContrasena);
+	                            break;
+	                            
 	                    }
 	                }
 	            });
@@ -177,30 +182,10 @@
 	 		$('#nombre').val(usuario.nombre);
 	 		$('#telefono').val(usuario.telefono);
 	 		$('#email').val(usuario.email);
-	 		$('#password').val(usuario.password);
-	 		
-	 		$("#password").prop("readonly", true);
-	 		$("#codUsuario").prop("readonly", true);
-	 		
-	 		//mostrar el formulario
-	 		$('#formularioUsuario').jqxWindow('open');
-	 	}
-	 	
-	 	/**
-	 	 * Mostrar el formulario en modo creacion
-	 	 */
-	 	function formularioCrear() {
-	 		modo = 'creacion'; //se va a crear nuevo usuario
-	 			 		
-	 		
-	 		$('#codUsuario').val('');
-	 		$('#nombre').val('');
-	 		$('#telefono').val('');
-	 		$('#email').val('');
 	 		$('#password').val('');
 	 		
 	 		$("#password").prop("readonly", false);
-	 		$("#codUsuario").prop("readonly", false);
+	 		$("#codUsuario").prop("readonly", true);
 	 		
 	 		//mostrar el formulario
 	 		$('#formularioUsuario').jqxWindow('open');
@@ -219,6 +204,7 @@
 	 		usuario.nombre = $('#nombre').val();
 	 		usuario.telefono = $('#telefono').val();
 	 		usuario.email = $('#email').val();
+	 		usuario.password = $('#password').val();
 	 			 		
 	 		if (modo == 'edicion') {
 	 			$.ajax({

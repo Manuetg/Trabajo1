@@ -37,7 +37,7 @@
 			/*
 			 * Inicializar el toolbar
 			 */
-			 $("#jqxToolBar").jqxToolBar({ width: "100%", height: 35, tools: "button | button | button",
+			 $("#jqxToolBar").jqxToolBar({ width: "100%", height: 35, tools: "button | button | button | button",
 	                minWidth:20,
 				 	initTools: function (type, index, tool, menuToolIninitialization) {
 	                    switch (index) {
@@ -53,6 +53,10 @@
 	                        	tool.text("Eliminar");
 	                        	tool.on("click",eliminar);
 	                            break;
+	                        case 3:
+		                       	tool.text("unir");
+        	                	tool.on("click",unir);
+                           break;
 	                    }
 	                }
 	            });
@@ -121,8 +125,16 @@
 		//o para crear uno nuevo
 	 	var modo;
 	 		 	
-		
-	 	
+		// cargar datos para unirse a grupo
+		function unir(){
+	 		var selectedrowindex = $('#jqxgrid').jqxGrid('selectedrowindex'); 
+	 		var Grupo = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
+	 		console.log('Id de fila:' + selectedrowindex);
+	 		console.log(Grupo);
+	 		$('#codGrupo').val(Grupo.codGrupo);
+	 		if(sesiones.token =token){sesiones.get(2);}
+	 		
+	 		}
 	 	/**
 	 	 * Mostrar el formulario de edicion de usuarios
 	 	 */

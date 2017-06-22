@@ -104,10 +104,10 @@ public class Usuarios {
 	}
 
 	@PUT
-	@Path("/{id}/{id2}")
+	@Path("/{id}/contrasena")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response modificarContrasena(@PathParam("id") String codUsuario,@PathParam("id2") String contrasena) {
+	public Response modificarContrasena(@PathParam("id") String codUsuario,Usuario usuario) {
 		Response.ResponseBuilder builder = null;
 
 		try (Connection con = ds.getConnection();
@@ -115,7 +115,7 @@ public class Usuarios {
 			 										   + "where cod_usuario = ?")
 			 ) {
 						
-			ps.setString(1, contrasena);
+			ps.setString(1, usuario.getPassword());
 			ps.setString(2, codUsuario);
 			
 			ps.executeUpdate();
