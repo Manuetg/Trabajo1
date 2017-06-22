@@ -27,7 +27,7 @@ import org.jboss.security.auth.callback.DatabaseCallbackHandler;
 import py.edu.upa.connecting.entidades.Grupo;
 import py.edu.upa.connecting.entidades.Usuario;
 
-@Path("/grupos")
+@Path("/gruposInutil")
 @RequestScoped
 public class Grupos {
 

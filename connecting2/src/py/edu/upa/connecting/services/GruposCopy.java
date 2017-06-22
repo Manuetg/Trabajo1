@@ -183,6 +183,8 @@ public class GruposCopy {
 			ps.setInt(5, grupo.getLongitud());
 			ps.setString(6, grupo.getCodUsuarioCreacion());
 			ps.setDate(7, new Date(System.currentTimeMillis()));
+			ps.setLong(8, grupo.getCodGrupo());
+
 			ps.executeUpdate();
 			
 			builder = Response.ok();

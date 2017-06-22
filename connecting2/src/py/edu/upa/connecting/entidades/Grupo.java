@@ -19,6 +19,7 @@ public class Grupo implements Serializable{
 	Date fechaCreacion;
 	
 	public Long getCodGrupo() {
+	if(codGrupo==null){return (long) 0;}
 		return codGrupo;
 	}
 	public void setCodGrupo(Long codGrupo) {
