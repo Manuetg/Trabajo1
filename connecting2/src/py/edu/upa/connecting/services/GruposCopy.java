@@ -249,10 +249,11 @@ public class GruposCopy {
 			e.printStackTrace();
 			return null;
 		}}
+		
 		@DELETE
 		@Path("/{id}/integrantes/{id2}")
 		@Produces(MediaType.APPLICATION_JSON)
-		public Response abandonarGrupo(@PathParam("id") String codUsuario,@PathParam("id2") Long codGrupo) {
+		public Response abandonarGrupo(@PathParam("id") Long codGrupo,@PathParam("id2") String codUsuario) {
 
 			Response.ResponseBuilder builder = null;
 
@@ -263,6 +264,35 @@ public class GruposCopy {
 							
 				ps.setString(1, codUsuario);
 				ps.setLong(2, codGrupo);
+				
+				ps.executeUpdate();
+				
+				builder = Response.ok();
+			
+			} catch (Exception e) {
+				// Handle generic exceptions.
+				e.printStackTrace();
+				Map<String, String> responseObj = new HashMap<String, String>();
+				responseObj.put("error","Ocurrio el siguiente error: " +  e.getMessage());
+				builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
+			}
+
+			return builder.build();
+	}
+		@POST
+		@Path("/{id}/integrantes/{id2}")
+		@Produces(MediaType.APPLICATION_JSON)
+		public Response unirGrupo(@PathParam("id") Long codGrupo,@PathParam("id2") String token) {
+			Response.ResponseBuilder builder = null;
+	
+
+			
+			try (Connection con = ds.getConnection();
+				 PreparedStatement ps = con.prepareStatement("insert into integrantes_grupo (cod_grupo,cod_usuario) values (?,?) ")
+				 ) {
+							
+				ps.setLong(1, codGrupo);
+				ps.setString(2, Sesion.metodoSesion(token));
 				
 				ps.executeUpdate();
 				

@@ -30,7 +30,11 @@ public class Sesion {
 	DataSource ds;
 	
 	//Almacena las sesiones activas
-	static HashMap<String, String> sesiones = new HashMap<String,String>();
+	public static HashMap<String, String> sesiones = new HashMap<String,String>();
+	
+	public static String metodoSesion(String token){
+		return sesiones.get(token);
+	};
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

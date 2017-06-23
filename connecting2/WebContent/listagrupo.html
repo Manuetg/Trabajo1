@@ -131,8 +131,16 @@
 	 		var Grupo = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
 	 		console.log('Id de fila:' + selectedrowindex);
 	 		console.log(Grupo);
-	 		$('#codGrupo').val(Grupo.codGrupo);
-	 		if(sesiones.token =token){sesiones.get(2);}
+	  		var token = localStorage.getItem('token');
+	 		
+	 		$.ajax({
+ 			    type: "POST",
+ 			    url: "rest/grupos/" +Grupo.codGrupo +"/integrantes/" + token,
+ 			    success:function() {
+ 					alert('Grupo unido exitosamente');	 					
+ 					location.reload(true);
+ 				  }	
+ 			});
 	 		
 	 		}
 	 	/**
