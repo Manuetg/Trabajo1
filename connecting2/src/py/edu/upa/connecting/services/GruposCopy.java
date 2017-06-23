@@ -131,7 +131,7 @@ public class GruposCopy {
 
 		return builder.build();
 	}
-	private ArrayList<Grupo> cargarGrupos(ResultSet rs) throws Exception {
+	public static ArrayList<Grupo> cargarGrupos(ResultSet rs) throws Exception {
 		ArrayList<Grupo> listaGrupos = new ArrayList<Grupo>();
 		
 		while(rs.next()) {

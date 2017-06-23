@@ -38,7 +38,6 @@ public class Usuarios {
 	@Resource(lookup = "java:jboss/datasources/ConnectingDS")
 	DataSource ds;
 	
-	
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
