@@ -44,9 +44,8 @@ public class GruposCopy {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Grupo> obtenerUsuarios(@QueryParam("latitud") Integer latitud,
-									   @QueryParam("longitud") Integer longitud,
-									   @QueryParam("cod_usuario") String codUsuario) {
+	public List<Grupo> obtenerUbicacion(@QueryParam("latitud") Integer latitud,
+									   @QueryParam("longitud") Integer longitud) {
 		
 		String sql = "select * from GRUPO where 1 = 1 ";
 		
@@ -55,15 +54,6 @@ public class GruposCopy {
 		
 		if (longitud != null)
 			sql += "and longitud = " + longitud;
-		
-		if (codUsuario != null)
-			sql += "and codUsuario = " + codUsuario;
-		
-		
-		
-		
-		
-
 		
 		try (Connection con = ds.getConnection();
 			 PreparedStatement ps = con.prepareStatement(sql)
@@ -107,7 +97,6 @@ public class GruposCopy {
 			return Response.serverError().build();
 		}
 	}
-	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -142,9 +131,6 @@ public class GruposCopy {
 
 		return builder.build();
 	}
-
-	
-	
 	private ArrayList<Grupo> cargarGrupos(ResultSet rs) throws Exception {
 		ArrayList<Grupo> listaGrupos = new ArrayList<Grupo>();
 		
@@ -163,7 +149,6 @@ public class GruposCopy {
 		}
 		return listaGrupos;
 	}
-	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -224,7 +209,6 @@ public class GruposCopy {
 
 		return builder.build();
 	}
-	
 	@GET
 	@Path("/{id}/integrantes")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -249,11 +233,10 @@ public class GruposCopy {
 			e.printStackTrace();
 			return null;
 		}}
-		
 		@DELETE
 		@Path("/{id}/integrantes/{id2}")
 		@Produces(MediaType.APPLICATION_JSON)
-		public Response abandonarGrupo(@PathParam("id") Long codGrupo,@PathParam("id2") String token) {
+	public Response abandonarGrupo(@PathParam("id") Long codGrupo,@PathParam("id2") String token) {
 
 			Response.ResponseBuilder builder = null;
 
@@ -282,7 +265,7 @@ public class GruposCopy {
 		@POST
 		@Path("/{id}/integrantes/{id2}")
 		@Produces(MediaType.APPLICATION_JSON)
-		public Response unirGrupo(@PathParam("id") Long codGrupo,@PathParam("id2") String token) {
+	public Response unirGrupo(@PathParam("id") Long codGrupo,@PathParam("id2") String token) {
 			Response.ResponseBuilder builder = null;
 	
 

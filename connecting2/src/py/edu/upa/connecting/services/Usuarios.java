@@ -19,9 +19,11 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import py.edu.upa.connecting.entidades.Grupo;
 import py.edu.upa.connecting.entidades.Usuario;
 
 @Path("/usuarios")
@@ -37,6 +39,39 @@ public class Usuarios {
 	DataSource ds;
 	
 	
+	@GET
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Grupo> obtenerUbicacionCerca(@PathParam("id") String token,
+										@QueryParam("latitud") Integer latitud,
+										@QueryParam("longitud") Integer longitud
+									   ) {
+		String codUsuario = Sesion.metodoSesion(token);
+
+		String sql = "select * from GRUPO where 1 = 1 ";
+		
+		if (latitud != null)
+			sql += "and latitud = " + latitud;
+		
+		if (longitud != null)
+			sql += "and longitud = " + longitud;
+		
+		if (codUsuario != null)
+			sql += "and codUsuario = " + codUsuario;
+		
+		try (Connection con = ds.getConnection();
+			 PreparedStatement ps = con.prepareStatement(sql)
+			 ) {
+			
+			ResultSet rs = ps.executeQuery();
+			return GruposCopy.cargarGrupos(rs);
+			
+		} catch (Exception e) {
+			// Handle generic exceptions.
+			e.printStackTrace();
+			return null;
+		}
+	}
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -69,7 +104,6 @@ public class Usuarios {
 
 		return builder.build();
 	}
-	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -102,7 +136,6 @@ public class Usuarios {
 
 		return builder.build();
 	}
-
 	@PUT
 	@Path("/{id}/contrasena")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -160,7 +193,6 @@ public class Usuarios {
 
 		return builder.build();
 	}
-	
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -189,8 +221,6 @@ public class Usuarios {
 			return null;
 		}
 	}
-	
-	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Usuario> obtenerUsuarios() {
@@ -208,7 +238,6 @@ public class Usuarios {
 			return null;
 		}
 	}
-	
 	public ArrayList<Usuario> cargarUsuarios(ResultSet rs) throws Exception {
 		ArrayList<Usuario> listaUsuarios = new ArrayList<Usuario>();
 		

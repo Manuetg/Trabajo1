@@ -37,7 +37,7 @@
 			/*
 			 * Inicializar el toolbar
 			 */
-			 $("#jqxToolBar").jqxToolBar({ width: "100%", height: 35, tools: "button | button | button | button | button",
+			 $("#jqxToolBar").jqxToolBar({ width: "100%", height: 35, tools: "button | button | button | button | button | button",
 	                minWidth:20,
 				 	initTools: function (type, index, tool, menuToolIninitialization) {
 	                    switch (index) {
@@ -61,6 +61,10 @@
 		                       	tool.text("Abandonar");
         	                	tool.on("click",abandonar);
                            		break;
+	                        case 5:
+		                       	tool.text("Ubicar");
+        	                	tool.on("click",ubicar);
+                           		break;	
 	                    }
 	                }
 	            });
@@ -160,6 +164,23 @@
  			    url: "rest/grupos/" +Grupo.codGrupo +"/integrantes/" + token,
  			    success:function() {
  					alert('Grupo salido exitosamente');	 					
+ 					location.reload(true);
+ 				  }	
+ 			});
+	 		
+	 		}
+		// cargar datos para ubicar grupo
+		function ubicar(){
+	 		var selectedrowindex = $('#jqxgrid').jqxGrid('selectedrowindex'); 
+	 		var Grupo = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
+	 		console.log('Id de fila:' + selectedrowindex);
+	 		console.log(Grupo);
+	 		
+	 		$.ajax({
+ 			    type: "GET",
+ 			    url: "rest/grupos/" +Grupo.codGrupo ,
+ 			    success:function() {
+ 					alert('Grupo encontrado exitosamente');	 					
  					location.reload(true);
  				  }	
  			});
