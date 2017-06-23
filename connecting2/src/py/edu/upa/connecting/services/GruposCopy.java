@@ -253,17 +253,17 @@ public class GruposCopy {
 		@DELETE
 		@Path("/{id}/integrantes/{id2}")
 		@Produces(MediaType.APPLICATION_JSON)
-		public Response abandonarGrupo(@PathParam("id") Long codGrupo,@PathParam("id2") String codUsuario) {
+		public Response abandonarGrupo(@PathParam("id") Long codGrupo,@PathParam("id2") String token) {
 
 			Response.ResponseBuilder builder = null;
 
 			try (Connection con = ds.getConnection();
 				 PreparedStatement ps = con.prepareStatement("delete from integrantes_grupo  "
-				 										   + "where integrantes_grupo.cod_usuario = '?' and integrantes_grupo.cod_grupo = '?'")
+				 										   + "where cod_grupo = ? and cod_usuario = ? ")
 				 ) {
 							
-				ps.setString(1, codUsuario);
-				ps.setLong(2, codGrupo);
+				ps.setLong(1, codGrupo);
+				ps.setString(2, Sesion.metodoSesion(token));
 				
 				ps.executeUpdate();
 				

@@ -37,7 +37,7 @@
 			/*
 			 * Inicializar el toolbar
 			 */
-			 $("#jqxToolBar").jqxToolBar({ width: "100%", height: 35, tools: "button | button | button | button",
+			 $("#jqxToolBar").jqxToolBar({ width: "100%", height: 35, tools: "button | button | button | button | button",
 	                minWidth:20,
 				 	initTools: function (type, index, tool, menuToolIninitialization) {
 	                    switch (index) {
@@ -54,9 +54,13 @@
 	                        	tool.on("click",eliminar);
 	                            break;
 	                        case 3:
-		                       	tool.text("unir");
+		                       	tool.text("Unir");
         	                	tool.on("click",unir);
-                           break;
+                           		break;
+	                        case 4:
+		                       	tool.text("Abandonar");
+        	                	tool.on("click",abandonar);
+                           		break;
 	                    }
 	                }
 	            });
@@ -138,6 +142,24 @@
  			    url: "rest/grupos/" +Grupo.codGrupo +"/integrantes/" + token,
  			    success:function() {
  					alert('Grupo unido exitosamente');	 					
+ 					location.reload(true);
+ 				  }	
+ 			});
+	 		
+	 		}
+		// cargar datos para abandonar grupo
+		function abandonar(){
+	 		var selectedrowindex = $('#jqxgrid').jqxGrid('selectedrowindex'); 
+	 		var Grupo = $('#jqxgrid').jqxGrid('getrowdata', selectedrowindex);
+	 		console.log('Id de fila:' + selectedrowindex);
+	 		console.log(Grupo);
+	  		var token = localStorage.getItem('token');
+	 		
+	 		$.ajax({
+ 			    type: "DELETE",
+ 			    url: "rest/grupos/" +Grupo.codGrupo +"/integrantes/" + token,
+ 			    success:function() {
+ 					alert('Grupo salido exitosamente');	 					
  					location.reload(true);
  				  }	
  			});
